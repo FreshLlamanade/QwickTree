@@ -2,15 +2,15 @@ package me.monst.qwicktree.chop;
 
 import java.util.List;
 
-import me.monst.qwicktree.tree.TreeInfo;
+import me.monst.qwicktree.tree.Tree;
 import org.bukkit.Location;
 
 public class TreeReplanter implements Runnable {
-	protected TreeInfo tree;
+	protected Tree tree;
 	protected List<Location> baseLocations;
 	protected int toReplant;
 	
-	public TreeReplanter(TreeInfo tree, List<Location> baseLocations, int toReplant) {
+	public TreeReplanter(Tree tree, List<Location> baseLocations, int toReplant) {
 		this.tree = tree;
 		this.baseLocations = baseLocations;
 		this.toReplant = toReplant;

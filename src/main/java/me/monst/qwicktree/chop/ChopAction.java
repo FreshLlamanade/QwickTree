@@ -1,17 +1,9 @@
 package me.monst.qwicktree.chop;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
-import java.util.Stack;
-import java.util.TreeMap;
+import java.util.*;
 
 import me.monst.qwicktree.QwickTree;
 import me.monst.qwicktree.config.Config;
-import me.monst.qwicktree.tree.info.TreeType;
 import me.monst.qwicktree.util.HouseIgnore;
 import me.monst.qwicktree.util.Message;
 import me.monst.qwicktree.util.Permission;
@@ -26,13 +18,13 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import me.monst.qwicktree.tree.TreeInfo;
+import me.monst.qwicktree.tree.Tree;
 import me.monst.qwicktree.util.Logging;
 import me.monst.qwicktree.util.debug.Debugger;
 
 public class ChopAction {
 	private final Player player;
-	private final TreeInfo tree;
+	private final Tree tree;
 	
 	private final Stack<Block> logsToSearch;
 	private final List<Location> baseBlocks;
@@ -51,7 +43,7 @@ public class ChopAction {
 	private boolean ignoreHouseBlocks;
 	private final Debugger debugger;
 	
-	public ChopAction(Player player, TreeInfo tree, Block baseBlock) {
+	public ChopAction(Player player, Tree tree, Block baseBlock) {
 		this.player = player;
 		this.tree = tree;
 		
@@ -121,11 +113,11 @@ public class ChopAction {
 		//Break all of the leaves and vines
 		debugger.addStage("CA.chop"); //1
 		for (Block leaf: leaves)
-			breakBlock(leaf);
+			disappear(leaf);
 
 		debugger.addStage("CA.chop"); //2
 		for (Block vine: vines)
-			breakBlock(vine);
+			disappear(vine);
 
 		debugger.addStage("CA.chop"); //3
 		//Check if autoCollect
@@ -133,21 +125,20 @@ public class ChopAction {
 				|| tree.doAutoCollect()) {
 			
 			for (Block log: logs)
-				breakBlock(log);
+				disappear(log);
 			
 			dropToInventory();
 		}
 		//Check if groupDrops (enabled if tree has replant timer
 		else if (Config.get().doGroupDrops() || tree.getReplantTimer() > 0) {
 			for (Block log: logs)
-				breakBlock(log);
+				disappear(log);
 			
 			dropToGroup();
 		}
 		//Check normal
 		else {
-			for (Block log: logs)
-				breakBlockNaturally(log);
+			logs.forEach(this::breakBlock);
 			
 			dropToWorld();
 		}
@@ -408,10 +399,7 @@ public class ChopAction {
 	}
 	
 	private void dropToWorld() {
-		HashMap<Location, ItemStack> drops = processDrops();
-		
-		for (Location location: drops.keySet())
-			dropAt(location, drops.get(location));
+		processDrops().forEach(this::dropAt);
 	}
 	
 	
@@ -437,7 +425,7 @@ public class ChopAction {
 			combinedDrops.put(Material.VINE, vines.size());
 		
 		//Then create ItemStacks of this
-		List<ItemStack> combinedList = new ArrayList<ItemStack>(combinedDrops.size());
+		List<ItemStack> combinedList = new ArrayList<>(combinedDrops.size());
 		
 		for (Material material: combinedDrops.keySet())
 			combinedList.add(new ItemStack(material, combinedDrops.get(material)));
@@ -446,7 +434,7 @@ public class ChopAction {
 	}
 	
 	private HashMap<Location, ItemStack> processDrops() {
-		HashMap<Location, ItemStack> drops = new HashMap<Location, ItemStack>();
+		HashMap<Location, ItemStack> drops = new HashMap<>();
 		
 		//For each leaf...
 		for (Block leaf: leaves) {
@@ -466,18 +454,18 @@ public class ChopAction {
 		return drops;
 	}
 	
+	// TODO: Take another look at this, it's a bit messy.
 	private Material getRandomDrop() {
-		TreeMap<Double, Material> dropChances = tree.getDrops();
-		double number = rnd.nextDouble();
-		Material selected = null;
-		
-		for (double dropChance: dropChances.keySet()) {
-			selected = dropChances.get(dropChance);
-			
-			if (number <= dropChance) break;
-		}
-		
-		return selected;
+		Material chanceDrop = tree.getDrops().entrySet().stream()
+				.filter(entry -> rnd.nextDouble() <= entry.getKey())
+				.map(Map.Entry::getValue)
+				.findFirst()
+				.orElse(null);
+		if (chanceDrop != null) return chanceDrop;
+		// Choose a random drop from the list
+		for (Material drop : tree.getDrops().values())
+			return drop;
+		return null;
 	}
 	
 	private void dropAt(Location location, ItemStack... items) {
@@ -495,53 +483,53 @@ public class ChopAction {
 	private int getLeafReach() {
 		int baseLeafReach = tree.getLeafReach();
 		
-		TreeType type = tree.getType();
+		Tree.Type type = tree.getType();
 		int size = logs.size();
 		Biome biome = logs.get(0).getBiome();
 		
-		
-		if (type == TreeType.OAK)
+		// TODO: Add more tree types here
+		if (type == Tree.Type.OAK)
 			if (biome == Biome.SWAMP || biome == Biome.MANGROVE_SWAMP)
 				baseLeafReach += 1;		//Oak in swamp, increase by 1
 			else if (size >= 15)
 				baseLeafReach += 1;		//Large oak elsewhere, increase by 1
 		
-		if (type == TreeType.PINE && size >= 20)
+		if (type == Tree.Type.PINE && size >= 20)
 			baseLeafReach += 1;			//Large pine, increase by 1
 		
-		if (type == TreeType.JUNGLE && size >= 20)
+		if (type == Tree.Type.JUNGLE && size >= 20)
 			baseLeafReach += 2;			//Large jungle, increase by 1
 		
 		return baseLeafReach;
 	}
 	
 	private String formatLocation(Block block) {
-		Location location = block.getLocation();
-		
-		return  location.getWorld().getName() + ", " +
-				location.getBlockX() + ", " +
-				location.getBlockY() + ", " +
-				location.getBlockZ();
+		return  block.getWorld().getName() + ", " +
+				block.getX() + ", " +
+				block.getY() + ", " +
+				block.getZ();
 	}
 	
 	private boolean groundInReach(Block block) {
-		int groundReach = tree.getLeafGroundOffset();
-		
-		for (int distance = 1; distance <= groundReach; distance++) {
-			Block newBlock = block.getRelative(BlockFace.DOWN, distance);
-			
-			if (tree.isValidStandingBlock(newBlock)) return true;
-		}
-		
-		return false;
+		// -1 because we are starting from one block down
+		return groundInReach(block.getRelative(BlockFace.DOWN), tree.getLeafGroundOffset() - 1);
 	}
 	
-	private void breakBlock(Block block) {
+	private boolean groundInReach(Block block, int distance) {
+		if (distance == 0)
+			return false;
+		Block nextBlock = block.getRelative(BlockFace.DOWN);
+		if (tree.isValidStandingBlock(nextBlock))
+			return true;
+		return groundInReach(nextBlock, distance - 1);
+	}
+	
+	private void disappear(Block block) {
 		Logging.logBreak(player, block);
 		block.setType(Material.AIR);
 	}
 	
-	private void breakBlockNaturally(Block block) {
+	private void breakBlock(Block block) {
 		Logging.logBreak(player, block);
 		block.breakNaturally();
 	}

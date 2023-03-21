@@ -3,7 +3,7 @@ package me.monst.qwicktree;
 import java.util.HashMap;
 
 import me.monst.qwicktree.config.Config;
-import me.monst.qwicktree.tree.info.TreeType;
+import me.monst.qwicktree.tree.Tree;
 import me.monst.qwicktree.util.DisabledList;
 import me.monst.qwicktree.util.HouseIgnore;
 import me.monst.qwicktree.util.Message;
@@ -71,22 +71,25 @@ public class QTCommand implements CommandExecutor {
 	public boolean infoCommand(CommandSender sender) {
 		if (!Permission.INFO.has(sender)) return Message.NO_PERMISSION.send(sender);
 		
-		HashMap<TreeType, Integer> chops = QwickTree.get().getChopCount();
+		HashMap<Tree.Type, Integer> chops = QwickTree.get().getChopCount();
 		
 		Message.INFO_TITLE.send(sender);
 		
-		for (TreeType type: chops.keySet())
+		for (Tree.Type type: chops.keySet())
 			Message.INFO_ITEM.send(sender, type.toString(), chops.get(type).toString());
 		
 		return true;
 	}
 	
 	public boolean bypassCommand(CommandSender sender, String[] args) {
-		if (!Permission.BYPASS.has(sender)) return Message.NO_PERMISSION.send(sender);
-		if (args.length <= 1) return Message.INVALID_ARGS.send(sender, "/qt bypass <player> [amount]");
+		if (!Permission.BYPASS.has(sender))
+			return Message.NO_PERMISSION.send(sender);
+		if (args.length <= 1)
+			return Message.INVALID_ARGS.send(sender, "/qt bypass <player> [amount]");
 		
 		Player player = Bukkit.getPlayer(args[1]);
-		if (player == null || player.isOnline() == false) return Message.PLAYER_NOT_FOUND.send(sender, args[1]);
+		if (player == null || !player.isOnline())
+			return Message.PLAYER_NOT_FOUND.send(sender, args[1]);
 		
 		int amount = 1;
 		

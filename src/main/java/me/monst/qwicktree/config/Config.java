@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import me.monst.qwicktree.QwickTree;
-import me.monst.qwicktree.tree.info.DamageType;
+import me.monst.qwicktree.tree.DamageType;
 import me.monst.qwicktree.util.Message;
 import org.bukkit.Material;
 import org.bukkit.TreeSpecies;
@@ -13,8 +13,7 @@ import org.bukkit.block.Block;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.inventory.ItemStack;
 
-import me.monst.qwicktree.tree.TreeInfo;
-import me.monst.qwicktree.tree.info.TreeType;
+import me.monst.qwicktree.tree.Tree;
 import me.monst.qwicktree.util.Permission;
 
 public class Config {
@@ -31,7 +30,7 @@ public class Config {
 	
 	private Configuration config;
 	
-	private List<TreeInfo> trees;
+	private List<Tree> trees;
 	private List<Material> houseBlock,
 						   handItems;
 	
@@ -51,7 +50,7 @@ public class Config {
 		QwickTree.get().saveDefaultConfig();
 		config = QwickTree.get().getConfig();
 		
-		trees = new LinkedList<TreeInfo>();
+		trees = new LinkedList<Tree>();
 	}
 	
 	public void update() {
@@ -114,7 +113,7 @@ public class Config {
 		trees.add(processTree(TreeSpecies.DARK_OAK, "dark_oak"));
 	}
 	
-	private TreeInfo processTree(TreeSpecies species, String name) {
+	private Tree processTree(TreeSpecies species, String name) {
 		String tag = "trees." + name + ".";
 		
 		boolean enabled = config.getBoolean(tag + "enabled");
@@ -143,7 +142,7 @@ public class Config {
 		int damageAmount = config.getInt(tag + "damage.amount");
 		int replantTimer = config.getInt(tag + "replantTimer");
 		
-		return new TreeInfo(TreeType.getFromSpecies(species), enabled, replant, autoCollect, allowStump, anyBlock, leafReach, leafGroundOffset, leafMin, logMin, logMax, drops, damageType, damageAmount, replantTimer);
+		return new Tree(Tree.Type.getFromSpecies(species), enabled, replant, autoCollect, allowStump, anyBlock, leafReach, leafGroundOffset, leafMin, logMin, logMax, drops, damageType, damageAmount, replantTimer);
 	}
 	
 	private List<Material> toMaterialList(List<String> list) {
@@ -159,8 +158,8 @@ public class Config {
 		return materialList;
 	}
 	
-	public TreeInfo getTreeByLog(Block block) {
-		for (TreeInfo tree: trees)
+	public Tree getTreeByLog(Block block) {
+		for (Tree tree: trees)
 			if (tree.isValidLog(block))
 				return tree;
 		

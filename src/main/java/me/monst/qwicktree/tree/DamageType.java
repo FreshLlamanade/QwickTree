@@ -1,4 +1,4 @@
-package me.monst.qwicktree.tree.info;
+package me.monst.qwicktree.tree;
 
 public enum DamageType {
 	NONE,

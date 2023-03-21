@@ -12,7 +12,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import me.monst.qwicktree.chop.ChopAction;
-import me.monst.qwicktree.tree.TreeInfo;
+import me.monst.qwicktree.tree.Tree;
 import me.monst.qwicktree.util.Permission;
 import me.monst.qwicktree.util.debug.Debugger;
 
@@ -36,7 +36,7 @@ public class QTListener implements Listener {
 
 		debugger.addStage("QTL.blockEvent"); //2
 		//Make sure the tree exists
-		TreeInfo tree = Config.get().getTreeByLog(block);
+		Tree tree = Config.get().getTreeByLog(block);
 		if (tree == null) return;
 
 		debugger.addStage("QTL.blockEvent"); //3
