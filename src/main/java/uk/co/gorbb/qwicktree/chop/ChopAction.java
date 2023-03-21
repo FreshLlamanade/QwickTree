@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Random;
 import java.util.Stack;
 import java.util.TreeMap;
@@ -32,35 +31,35 @@ import uk.co.gorbb.qwicktree.util.Permission;
 import uk.co.gorbb.qwicktree.util.debug.Debugger;
 
 public class ChopAction {
-	private Player player;
-	private TreeInfo tree;
+	private final Player player;
+	private final TreeInfo tree;
 	
-	private Stack<Block> logsToSearch;
-	private List<Location> baseBlocks;
-	private Location dropLocation;
+	private final Stack<Block> logsToSearch;
+	private final List<Location> baseBlocks;
+	private final Location dropLocation;
 	
-	private List<Block> logs,
-						leaves,
-						vines;
+	private final List<Block> logs;
+	private final List<Block> leaves;
+	private final List<Block> vines;
 	
 	private boolean 	doReplant;
 	private int 		totalToReplant,
 						leftToTake;
 	
-	private Random rnd;
+	private final Random rnd;
 	
 	private boolean ignoreHouseBlocks;
-	private Debugger debugger;
+	private final Debugger debugger;
 	
 	public ChopAction(Player player, TreeInfo tree, Block baseBlock) {
 		this.player = player;
 		this.tree = tree;
 		
-		logsToSearch = new Stack<Block>();
-		logs = new LinkedList<Block>();
-		leaves = new LinkedList<Block>();
-		baseBlocks = new LinkedList<Location>();
-		vines = new LinkedList<Block>();
+		logsToSearch = new Stack<>();
+		logs = new LinkedList<>();
+		leaves = new LinkedList<>();
+		baseBlocks = new LinkedList<>();
+		vines = new LinkedList<>();
 		
 		rnd = new Random();
 		
@@ -181,11 +180,8 @@ public class ChopAction {
 	}
 	
 	private void takeSaplingsFromInventory() {
-		ListIterator<ItemStack> iterator = player.getInventory().iterator();
 		
-		while (iterator.hasNext()) {
-			ItemStack item = iterator.next();
-			
+		for (ItemStack item : player.getInventory()) {
 			if (item == null)
 				continue;
 			
@@ -324,9 +320,7 @@ public class ChopAction {
 		if (logs.size() < tree.getLogMin()) return false;
 		if (logs.size() > tree.getLogMax()) return false;
 		
-		if (leaves.size() < tree.getLeafMin()) return false;
-		
-		return true;
+		return leaves.size() >= tree.getLeafMin();
 	}
 	
 	private void checkReplant() {
@@ -404,9 +398,7 @@ public class ChopAction {
 		ItemStack[] items = combineItems();
 		HashMap<Integer, ItemStack> returned = player.getInventory().addItem(items);
 		
-		if (returned == null) return;
-		
-		ItemStack[] returnedItems = returned.values().toArray(new ItemStack[returned.size()]);
+		ItemStack[] returnedItems = returned.values().toArray(new ItemStack[0]);
 		
 		dropAt(dropLocation, returnedItems);
 	}
@@ -438,7 +430,7 @@ public class ChopAction {
 		}
 		
 		//Add the logs, since everything here is being combined...
-		combinedDrops.put(tree.getType().getLogMaterial(), logs.size());
+		combinedDrops.put(tree.getType().getLogType(), logs.size());
 		
 		//And then the vines if there are any.
 		if (vines.size() > 0)
@@ -450,7 +442,7 @@ public class ChopAction {
 		for (Material material: combinedDrops.keySet())
 			combinedList.add(new ItemStack(material, combinedDrops.get(material)));
 		
-		return combinedList.toArray(new ItemStack[combinedList.size()]);
+		return combinedList.toArray(new ItemStack[0]);
 	}
 	
 	private HashMap<Location, ItemStack> processDrops() {
@@ -509,7 +501,7 @@ public class ChopAction {
 		
 		
 		if (type == TreeType.OAK)
-			if (biome == Biome.SWAMP || biome == Biome.SWAMP_HILLS)
+			if (biome == Biome.SWAMP || biome == Biome.MANGROVE_SWAMP)
 				baseLeafReach += 1;		//Oak in swamp, increase by 1
 			else if (size >= 15)
 				baseLeafReach += 1;		//Large oak elsewhere, increase by 1
@@ -527,7 +519,7 @@ public class ChopAction {
 		Location location = block.getLocation();
 		
 		return  location.getWorld().getName() + ", " +
-				location.getBlockX() + ", " + 
+				location.getBlockX() + ", " +
 				location.getBlockY() + ", " +
 				location.getBlockZ();
 	}

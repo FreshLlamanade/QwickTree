@@ -3,6 +3,12 @@
 .project
 .settings/
 
+# IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+
 # Mac
 .DS_Store
 

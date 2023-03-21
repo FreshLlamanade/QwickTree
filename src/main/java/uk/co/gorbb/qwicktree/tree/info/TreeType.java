@@ -2,22 +2,29 @@ package uk.co.gorbb.qwicktree.tree.info;
 
 import org.bukkit.Material;
 import org.bukkit.TreeSpecies;
-import org.bukkit.block.Block;
+
+import static org.bukkit.Material.*;
 
 public enum TreeType {
-	OAK("Oak"),
-	PINE("Pine"),
-	BIRCH("Birch"),
-	JUNGLE("Jungle"),
-	DARK_OAK("Dark Oak"),
-	ACACIA("Acacia"),
-	CUSTOM("Custom"),
+	OAK("Oak", OAK_LOG, OAK_LEAVES, OAK_SAPLING),
+	PINE("Pine", SPRUCE_LOG, SPRUCE_LEAVES, SPRUCE_SAPLING),
+	BIRCH("Birch", BIRCH_LOG, BIRCH_LEAVES, BIRCH_SAPLING),
+	JUNGLE("Jungle", JUNGLE_LOG, JUNGLE_LEAVES, JUNGLE_SAPLING),
+	DARK_OAK("Dark Oak", DARK_OAK_LOG, DARK_OAK_LEAVES, DARK_OAK_SAPLING),
+	ACACIA("Acacia", ACACIA_LOG, ACACIA_LEAVES, ACACIA_SAPLING),
+	CUSTOM("Custom", null, null, null),
 	;
 	
-	private String name;
+	private final String name;
+	private final Material log;
+	private final Material leaf;
+	private final Material sapling;
 	
-	private TreeType(String name) {
+	TreeType(String name, Material log, Material leaf, Material sapling) {
 		this.name = name;
+		this.log = log;
+		this.leaf = leaf;
+		this.sapling = sapling;
 	}
 	
 	@Override
@@ -25,70 +32,16 @@ public enum TreeType {
 		return name;
 	}
 	
-	public Material getLogMaterial() {
-		switch (this) {
-			case OAK:		return Material.OAK_LOG;
-			case PINE:		return Material.SPRUCE_LOG;
-			case BIRCH:		return Material.BIRCH_LOG;
-			case JUNGLE:	return Material.JUNGLE_LOG;
-			case ACACIA:	return Material.ACACIA_LOG;
-			case DARK_OAK:	return Material.DARK_OAK_LOG;
-			case CUSTOM:
-			default:
-				return null;
-		}
+	public Material getLogType() {
+		return log;
 	}
 	
-	public Material getLeafMaterial() {
-		switch (this) {
-			case OAK:		return Material.OAK_LEAVES;
-			case PINE:		return Material.SPRUCE_LEAVES;
-			case BIRCH:		return Material.BIRCH_LEAVES;
-			case JUNGLE:	return Material.JUNGLE_LEAVES;
-			case ACACIA:	return Material.ACACIA_LEAVES;
-			case DARK_OAK:	return Material.DARK_OAK_LEAVES;
-			case CUSTOM:
-			default:
-				return null;
-		}
+	public Material getLeafType() {
+		return leaf;
 	}
 	
-	public Material getSaplingMaterial() {
-		switch (this) {
-			case OAK:		return Material.OAK_SAPLING;
-			case PINE:		return Material.SPRUCE_SAPLING;
-			case BIRCH:		return Material.BIRCH_SAPLING;
-			case JUNGLE:	return Material.JUNGLE_SAPLING;
-			case ACACIA:	return Material.ACACIA_SAPLING;
-			case DARK_OAK:	return Material.DARK_OAK_SAPLING;
-			case CUSTOM:
-			default:
-				return null;
-		}
-	}
-	
-	public boolean matchesLog(Material material) {
-		return getLogMaterial() == material;
-	}
-	
-	public boolean matchesLeaf(Material material) {
-		return getLeafMaterial() == material;
-	}
-	
-	public boolean matchesSapling(Material material) {
-		return getSaplingMaterial() == material;
-	}
-	
-	public boolean matchesLog(Block block) {
-		return block != null && matchesLog(block.getType());
-	}
-	
-	public boolean matchesLeaf(Block block) {
-		return block != null && matchesLeaf(block.getType());
-	}
-	
-	public boolean matchesSapling(Block block) {
-		return block != null && matchesSapling(block.getType());
+	public Material getSaplingType() {
+		return sapling;
 	}
 	
 	public static TreeType getFromSpecies(TreeSpecies species) {

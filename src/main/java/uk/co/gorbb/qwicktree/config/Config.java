@@ -92,8 +92,7 @@ public class Config {
 		treeProtectionConsole = config.getBoolean("treeProtection.message.console");
 		
 		usePerms = config.getBoolean("usePerms");
-		if (usePerms)	Permission.USE.setDefault(false);
-		else			Permission.USE.setDefault(true);
+		Permission.USE.setDefault(!usePerms);
 		
 		allowSelfToggle = config.getBoolean("allowSelfToggle");
 		if (allowSelfToggle)	Permission.TOGGLE_SELF.setDefault(true);
