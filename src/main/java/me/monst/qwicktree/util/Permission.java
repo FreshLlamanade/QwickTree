@@ -1,4 +1,4 @@
-package uk.co.gorbb.qwicktree.util;
+package me.monst.qwicktree.util;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -50,7 +50,7 @@ public enum Permission {
 		if (permission == null)
 			Bukkit.getServer().getPluginManager().addPermission(new org.bukkit.permissions.Permission(name, defaultValue));
 		else
-			permission.setDefault(defaultValue);		
+			permission.setDefault(defaultValue);
 	}
 	
 }

@@ -1,5 +1,7 @@
-package uk.co.gorbb.qwicktree;
+package me.monst.qwicktree;
 
+import me.monst.qwicktree.config.Config;
+import me.monst.qwicktree.util.DisabledList;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -9,12 +11,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import uk.co.gorbb.qwicktree.chop.ChopAction;
-import uk.co.gorbb.qwicktree.config.Config;
-import uk.co.gorbb.qwicktree.tree.TreeInfo;
-import uk.co.gorbb.qwicktree.util.DisabledList;
-import uk.co.gorbb.qwicktree.util.Permission;
-import uk.co.gorbb.qwicktree.util.debug.Debugger;
+import me.monst.qwicktree.chop.ChopAction;
+import me.monst.qwicktree.tree.TreeInfo;
+import me.monst.qwicktree.util.Permission;
+import me.monst.qwicktree.util.debug.Debugger;
 
 public class QTListener implements Listener {
 	

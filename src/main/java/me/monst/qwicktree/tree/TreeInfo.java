@@ -1,19 +1,18 @@
-package uk.co.gorbb.qwicktree.tree;
+package me.monst.qwicktree.tree;
 
 import java.util.List;
 import java.util.TreeMap;
 
+import me.monst.qwicktree.tree.info.DamageType;
+import me.monst.qwicktree.tree.info.TreeType;
+import me.monst.qwicktree.util.Message;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
-import uk.co.gorbb.qwicktree.tree.info.DamageType;
-import uk.co.gorbb.qwicktree.tree.info.TreeType;
-import uk.co.gorbb.qwicktree.util.Message;
-
 public class TreeInfo {
-	private TreeType					treeType;			//Used for internal purposes.
+	private TreeType treeType;			//Used for internal purposes.
 	
 	private boolean 					enabled,			//Whether or not this tree is enabled.
 										replant,			//Whether or not to replace saplings when the tree is chopped down.
@@ -30,7 +29,7 @@ public class TreeInfo {
 	
 	private TreeMap<Double, Material>	drops;				//Which items to drop when the tree is chopped.
 	
-	private DamageType					damageType;			//Which type of damage to deal to a damagable item when the tree is chopped.
+	private DamageType damageType;			//Which type of damage to deal to a damagable item when the tree is chopped.
 	private int							damageAmount,		//The multiplier or amount of damage to deal, depending on the damage type.
 										replantTimer;		//Time (in ticks) to replant the tree after chopping it
 	

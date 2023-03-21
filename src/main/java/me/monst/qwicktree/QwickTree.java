@@ -1,14 +1,14 @@
-package uk.co.gorbb.qwicktree;
+package me.monst.qwicktree;
 
 import java.util.HashMap;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import uk.co.gorbb.qwicktree.config.Config;
-import uk.co.gorbb.qwicktree.tree.info.TreeType;
-import uk.co.gorbb.qwicktree.util.DisabledList;
-import uk.co.gorbb.qwicktree.util.HouseIgnore;
-import uk.co.gorbb.qwicktree.util.Logging;
+import me.monst.qwicktree.config.Config;
+import me.monst.qwicktree.tree.info.TreeType;
+import me.monst.qwicktree.util.DisabledList;
+import me.monst.qwicktree.util.HouseIgnore;
+import me.monst.qwicktree.util.Logging;
 
 public class QwickTree extends JavaPlugin {
 	private static QwickTree instance;

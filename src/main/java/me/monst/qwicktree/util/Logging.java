@@ -1,4 +1,4 @@
-package uk.co.gorbb.qwicktree.util;
+package me.monst.qwicktree.util;
 
 import net.coreprotect.CoreProtect;
 import net.coreprotect.CoreProtectAPI;

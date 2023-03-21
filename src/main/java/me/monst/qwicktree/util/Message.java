@@ -1,4 +1,4 @@
-package uk.co.gorbb.qwicktree.util;
+package me.monst.qwicktree.util;
 
 import java.util.logging.Logger;
 
@@ -7,7 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import uk.co.gorbb.qwicktree.QwickTree;
+import me.monst.qwicktree.QwickTree;
 
 public enum Message {
 	EXTERNAL_PLUGIN_ENABLED("Plugin {0} was found."),

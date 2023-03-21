@@ -1,10 +1,9 @@
-package uk.co.gorbb.qwicktree.util;
+package me.monst.qwicktree.util;
 
 import java.util.HashMap;
 
+import me.monst.qwicktree.QwickTree;
 import org.bukkit.entity.Player;
-
-import uk.co.gorbb.qwicktree.QwickTree;
 
 public class HouseIgnore {
 	private static HouseIgnore instance;

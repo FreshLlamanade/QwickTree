@@ -1,4 +1,4 @@
-package uk.co.gorbb.qwicktree.tree.info;
+package me.monst.qwicktree.tree.info;
 
 import org.bukkit.Material;
 import org.bukkit.TreeSpecies;

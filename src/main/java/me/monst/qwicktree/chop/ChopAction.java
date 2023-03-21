@@ -1,4 +1,4 @@
-package uk.co.gorbb.qwicktree.chop;
+package me.monst.qwicktree.chop;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,6 +9,12 @@ import java.util.Random;
 import java.util.Stack;
 import java.util.TreeMap;
 
+import me.monst.qwicktree.QwickTree;
+import me.monst.qwicktree.config.Config;
+import me.monst.qwicktree.tree.info.TreeType;
+import me.monst.qwicktree.util.HouseIgnore;
+import me.monst.qwicktree.util.Message;
+import me.monst.qwicktree.util.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -20,15 +26,9 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import uk.co.gorbb.qwicktree.QwickTree;
-import uk.co.gorbb.qwicktree.config.Config;
-import uk.co.gorbb.qwicktree.tree.TreeInfo;
-import uk.co.gorbb.qwicktree.tree.info.TreeType;
-import uk.co.gorbb.qwicktree.util.HouseIgnore;
-import uk.co.gorbb.qwicktree.util.Logging;
-import uk.co.gorbb.qwicktree.util.Message;
-import uk.co.gorbb.qwicktree.util.Permission;
-import uk.co.gorbb.qwicktree.util.debug.Debugger;
+import me.monst.qwicktree.tree.TreeInfo;
+import me.monst.qwicktree.util.Logging;
+import me.monst.qwicktree.util.debug.Debugger;
 
 public class ChopAction {
 	private final Player player;

@@ -1,10 +1,9 @@
-package uk.co.gorbb.qwicktree.chop;
+package me.monst.qwicktree.chop;
 
 import java.util.List;
 
+import me.monst.qwicktree.tree.TreeInfo;
 import org.bukkit.Location;
-
-import uk.co.gorbb.qwicktree.tree.TreeInfo;
 
 public class TreeReplanter implements Runnable {
 	protected TreeInfo tree;

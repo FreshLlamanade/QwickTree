@@ -1,21 +1,21 @@
-package uk.co.gorbb.qwicktree.config;
+package me.monst.qwicktree.config;
 
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
+import me.monst.qwicktree.QwickTree;
+import me.monst.qwicktree.tree.info.DamageType;
+import me.monst.qwicktree.util.Message;
 import org.bukkit.Material;
 import org.bukkit.TreeSpecies;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.inventory.ItemStack;
 
-import uk.co.gorbb.qwicktree.QwickTree;
-import uk.co.gorbb.qwicktree.tree.TreeInfo;
-import uk.co.gorbb.qwicktree.tree.info.DamageType;
-import uk.co.gorbb.qwicktree.tree.info.TreeType;
-import uk.co.gorbb.qwicktree.util.Message;
-import uk.co.gorbb.qwicktree.util.Permission;
+import me.monst.qwicktree.tree.TreeInfo;
+import me.monst.qwicktree.tree.info.TreeType;
+import me.monst.qwicktree.util.Permission;
 
 public class Config {
 	private static final int CURRENT_VERSION = 3;

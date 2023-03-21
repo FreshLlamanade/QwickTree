@@ -1,12 +1,11 @@
-package uk.co.gorbb.qwicktree.util;
+package me.monst.qwicktree.util;
 
 import java.util.List;
 import java.util.UUID;
 
+import me.monst.qwicktree.QwickTree;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-
-import uk.co.gorbb.qwicktree.QwickTree;
 
 public class DisabledList {
 	private static DisabledList instance;

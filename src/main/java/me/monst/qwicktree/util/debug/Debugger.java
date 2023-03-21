@@ -1,10 +1,9 @@
-package uk.co.gorbb.qwicktree.util.debug;
+package me.monst.qwicktree.util.debug;
 
 import java.util.HashMap;
 
+import me.monst.qwicktree.util.Message;
 import org.bukkit.entity.Player;
-
-import uk.co.gorbb.qwicktree.util.Message;
 
 public class Debugger {
 	private static HashMap<Player, Debugger> instances = new HashMap<Player, Debugger>();

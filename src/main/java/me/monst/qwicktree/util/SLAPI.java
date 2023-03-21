@@ -1,4 +1,4 @@
-package uk.co.gorbb.qwicktree.util;
+package me.monst.qwicktree.util;
 
 import java.io.File;
 import java.io.FileInputStream;

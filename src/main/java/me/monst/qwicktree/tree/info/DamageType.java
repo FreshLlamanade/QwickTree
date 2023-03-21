@@ -1,4 +1,4 @@
-package uk.co.gorbb.qwicktree.tree.info;
+package me.monst.qwicktree.tree.info;
 
 public enum DamageType {
 	NONE,

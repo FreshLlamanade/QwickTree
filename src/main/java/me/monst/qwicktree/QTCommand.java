@@ -1,20 +1,19 @@
-package uk.co.gorbb.qwicktree;
+package me.monst.qwicktree;
 
 import java.util.HashMap;
 
+import me.monst.qwicktree.config.Config;
+import me.monst.qwicktree.tree.info.TreeType;
+import me.monst.qwicktree.util.DisabledList;
+import me.monst.qwicktree.util.HouseIgnore;
+import me.monst.qwicktree.util.Message;
+import me.monst.qwicktree.util.Permission;
+import me.monst.qwicktree.util.debug.Debugger;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import uk.co.gorbb.qwicktree.config.Config;
-import uk.co.gorbb.qwicktree.tree.info.TreeType;
-import uk.co.gorbb.qwicktree.util.DisabledList;
-import uk.co.gorbb.qwicktree.util.HouseIgnore;
-import uk.co.gorbb.qwicktree.util.Message;
-import uk.co.gorbb.qwicktree.util.Permission;
-import uk.co.gorbb.qwicktree.util.debug.Debugger;
 
 public class QTCommand implements CommandExecutor {
 	
