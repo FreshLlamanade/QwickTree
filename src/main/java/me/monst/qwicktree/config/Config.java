@@ -30,7 +30,7 @@ public class Config {
 	
 	private Configuration config;
 	
-	private List<Tree> trees;
+	private final List<Tree> trees;
 	private List<Material> houseBlock,
 						   handItems;
 	
@@ -50,7 +50,7 @@ public class Config {
 		QwickTree.get().saveDefaultConfig();
 		config = QwickTree.get().getConfig();
 		
-		trees = new LinkedList<Tree>();
+		trees = new LinkedList<>();
 	}
 	
 	public void update() {
@@ -146,7 +146,7 @@ public class Config {
 	}
 	
 	private List<Material> toMaterialList(List<String> list) {
-		List<Material> materialList = new LinkedList<Material>();
+		List<Material> materialList = new LinkedList<>();
 		
 		for (String item: list) {
 			Material material = Material.getMaterial(item);

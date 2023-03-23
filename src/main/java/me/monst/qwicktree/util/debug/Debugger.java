@@ -6,7 +6,7 @@ import me.monst.qwicktree.util.Message;
 import org.bukkit.entity.Player;
 
 public class Debugger {
-	private static HashMap<Player, Debugger> instances = new HashMap<Player, Debugger>();
+	private static final HashMap<Player, Debugger> instances = new HashMap<>();
 	
 	public static Debugger get(Player player) {
 		if (instances.get(player) == null)
@@ -21,14 +21,14 @@ public class Debugger {
 	
 	
 	
-	private Player player;
-	private HashMap<String, Integer> stages;
+	private final Player player;
+	private final HashMap<String, Integer> stages;
 	private boolean enabled;
 	
 	private Debugger(Player player) {
 		this.player = player;
 		
-		stages = new HashMap<String, Integer>();
+		stages = new HashMap<>();
 		enabled = false;
 	}
 	

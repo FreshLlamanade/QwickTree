@@ -3,7 +3,7 @@ package me.monst.qwicktree.chop;
 import java.util.*;
 
 import me.monst.qwicktree.QwickTree;
-import me.monst.qwicktree.config.Config;
+import me.monst.qwicktree.config.Configuration;
 import me.monst.qwicktree.util.HouseIgnore;
 import me.monst.qwicktree.util.Message;
 import me.monst.qwicktree.util.Permission;
@@ -23,6 +23,8 @@ import me.monst.qwicktree.util.Logging;
 import me.monst.qwicktree.util.debug.Debugger;
 
 public class ChopAction {
+	
+	private final Configuration config;
 	private final Player player;
 	private final Tree tree;
 	
@@ -43,7 +45,8 @@ public class ChopAction {
 	private boolean ignoreHouseBlocks;
 	private final Debugger debugger;
 	
-	public ChopAction(Player player, Tree tree, Block baseBlock) {
+	public ChopAction(Configuration config, Player player, Tree tree, Block baseBlock) {
+		this.config = config;
 		this.player = player;
 		this.tree = tree;
 		
@@ -110,7 +113,7 @@ public class ChopAction {
 	private void chop() {
 		QwickTree.get().addTreeChop(tree.getType());
 		
-		//Break all of the leaves and vines
+		//Break all the leaves and vines
 		debugger.addStage("CA.chop"); //1
 		for (Block leaf: leaves)
 			disappear(leaf);
@@ -121,16 +124,15 @@ public class ChopAction {
 
 		debugger.addStage("CA.chop"); //3
 		//Check if autoCollect
-		if (player.getGameMode() == GameMode.CREATIVE && Config.get().doCreativeAutoCollect()
-				|| tree.doAutoCollect()) {
+		if (player.getGameMode() == GameMode.CREATIVE && config.creativeModeSettings.doAutoCollect.get() || tree.doAutoCollect()) {
 			
 			for (Block log: logs)
 				disappear(log);
 			
 			dropToInventory();
 		}
-		//Check if groupDrops (enabled if tree has replant timer
-		else if (Config.get().doGroupDrops() || tree.getReplantTimer() > 0) {
+		//Check if groupDrops (enabled if tree has replant timer)
+		else if (config.doGroupDrops.get() || tree.getReplantTimer() > 0) {
 			for (Block log: logs)
 				disappear(log);
 			
@@ -245,61 +247,66 @@ public class ChopAction {
 	
 	private boolean houseBlockSearch(Block log) {
 		//Don't bother if tree protection is disabled
-		if (!Config.get().isTreeProtectionEnabled())
+		if (!config.treeProtection.enabled.get())
 			return true;
 		
-		for (int x = -2; x <= 2; x++)
-			for (int z = -2; z <= 2; z++)
+		for (int x = -2; x <= 2; x++) {
+			for (int z = -2; z <= 2; z++) {
 				for (int y = -1; y <= 1; y++) {
-					Block current = log.getRelative(x,  y,  z);
+					Block current = log.getRelative(x, y, z);
 					
 					//Check for house block
-					if (!ignoreHouseBlocks && Config.get().isHouseBlock(current))
+					if (!ignoreHouseBlocks && config.houseMaterials.contains(current)) {
 						if (HouseIgnore.get().ignoreHouseBlocks(player))
 							ignoreHouseBlocks = true;
 						else {
 							//Check whether to log to console
-							if (Config.get().useTreeProtectionConsole())
+							if (config.treeProtection.message.console.get())
 								Message.NOTIFY.info(player.getName(), formatLocation(current));
 							
 							//Check whether to send in chat
-							if (Config.get().useTreeProtectionChat())
+							if (config.treeProtection.message.chat.get())
 								Message.NOTIFY.send(Permission.NOTIFY, player.getName(), formatLocation(current));
 							
 							return false;
 						}
+					}
 				}
-
+			}
+		}
 		return true;
 	}
 	
 	private boolean leafSearch() {
 		int leafReach = getLeafReach();
 		
-		for (Block log: logs) //For each log
-			for (int x = -leafReach; x <= leafReach; x++)
-				for (int z = -leafReach; z <= leafReach; z++)
+		for (Block log: logs) { // For each log
+			for (int x = -leafReach; x <= leafReach; x++) {
+				for (int z = -leafReach; z <= leafReach; z++) {
 					for (int y = 0; y <= leafReach; y++) {
 						Block current = log.getRelative(x, y, z);
 						
 						if (!processCurrentLeaf(current)) return false;
 					}
+				}
+			}
+		}
 		
 		return true;
 	}
 	
+	// TODO: Does not need to return a boolean
 	private boolean processCurrentLeaf(Block current) {
 		//Check for vines
-		if (current.getType() == Material.VINE && vines.size() < Config.get().getMaxVines())
+		if (current.getType() == Material.VINE && vines.size() < config.maxVines.get())
 			vines.add(current);
 		
 		//Check for leaves
-		if (!tree.isValidLeaf(current) ||		//If it's not a valid leaf...
-				leaves.contains(current) ||		//...or the leaf has already been found...
-				groundInReach(current))			//...or it's within ground reach...
-			return true;						//...then get outta here!
+		if (tree.isValidLeaf(current) &&		// If it's a valid leaf...
+				!leaves.contains(current) &&	// ...and the leaf has not already been found...
+				!groundInReach(current))		// ...and it's not within ground reach...
+			leaves.add(current);				// ...then add it to the list.
 		
-		leaves.add(current);
 		return true;
 	}
 	
@@ -317,7 +324,7 @@ public class ChopAction {
 	private void checkReplant() {
 		doReplant = tree.doReplant();
 		
-		if (player.getGameMode() == GameMode.CREATIVE && !Config.get().doCreativeReplant())
+		if (player.getGameMode() == GameMode.CREATIVE && !config.creativeModeSettings.replant.get())
 			doReplant = false;
 		
 		totalToReplant = baseBlocks.size();
@@ -329,7 +336,7 @@ public class ChopAction {
 	/* ### DAMAGE ### */
 	private boolean doDamage() {
 		//If player is creative and shouldn't do damage, then return
-		if (player.getGameMode() == GameMode.CREATIVE && !Config.get().doCreativeDamage()) return true;
+		if (player.getGameMode() == GameMode.CREATIVE && !config.creativeModeSettings.doDamage.get()) return true;
 		
 		//Work out base damage
 		int damageAmt;
@@ -405,7 +412,7 @@ public class ChopAction {
 	
 	private ItemStack[] combineItems() {
 		Collection<ItemStack> drops = processDrops().values();
-		HashMap<Material, Integer> combinedDrops = new HashMap<Material, Integer>();
+		HashMap<Material, Integer> combinedDrops = new HashMap<>();
 		
 		//First get how many of each item we should have
 		for (ItemStack drop: drops) {

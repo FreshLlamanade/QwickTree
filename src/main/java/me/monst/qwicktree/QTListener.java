@@ -1,6 +1,7 @@
 package me.monst.qwicktree;
 
 import me.monst.qwicktree.config.Config;
+import me.monst.qwicktree.config.Configuration;
 import me.monst.qwicktree.util.DisabledList;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -17,6 +18,12 @@ import me.monst.qwicktree.util.Permission;
 import me.monst.qwicktree.util.debug.Debugger;
 
 public class QTListener implements Listener {
+	
+	private final Configuration config;
+	
+	public QTListener(Configuration config) {
+		this.config = config;
+	}
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void blockBreakEvent(BlockBreakEvent event) {
@@ -49,7 +56,7 @@ public class QTListener implements Listener {
 
 		debugger.addStage("QTL.blockEvent"); //5
 		//Okay then, chop!
-		ChopAction chop = new ChopAction(player, tree, block);
+		ChopAction chop = new ChopAction(config, player, tree, block);
 		
 		chop.go();
 
@@ -59,11 +66,11 @@ public class QTListener implements Listener {
 	private boolean canChop(Debugger debugger, Player player) {
 		debugger.addStage("QTL.canChop"); //1
 		//Player needs to have one of the 'items' in their hand.
-		if (!Config.get().isHandItem(player.getInventory().getItemInMainHand())) return false;
+		if (!config.allowedTools.contains(player.getInventory().getItemInMainHand())) return false;
 		
 		debugger.addStage("QTL.canChop"); //2
 		//Check player has permission or usePerms is false in config
-		if (!Permission.USE.has(player) && Config.get().usePerms()) return false;
+		if (config.usePerms.get() && !Permission.USE.has(player)) return false;
 		
 		debugger.addStage("QTL.canChop"); //3
 		//Check plugin is enabled for player

@@ -40,15 +40,32 @@
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
 			<version>1.19.4-R0.1-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>net.coreprotect</groupId>
 			<artifactId>coreprotect</artifactId>
 			<version>21.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>me.monst</groupId>
+			<artifactId>plugin-util</artifactId>
+			<version>1.2.5</version>
+			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 
 	<build>
+		<finalName>QwickTree</finalName>
+		<sourceDirectory>src/main/java</sourceDirectory>
+		<resources>
+			<resource>
+				<targetPath>.</targetPath>
+				<filtering>true</filtering>
+				<directory>${basedir}/src/main/resources/</directory>
+			</resource>
+		</resources>
 		<plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -59,20 +76,47 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-        </plugins>
-
-		<finalName>QwickTree</finalName>
-		<sourceDirectory>src/main/java</sourceDirectory>
-		<resources>
-			<resource>
-				<targetPath>.</targetPath>
-				<filtering>true</filtering>
-				<directory>${basedir}/src/main/resources/</directory>
-				<includes>
-					<include>plugin.yml</include>
-					<include>config.yml</include>
-				</includes>
-			</resource>
-		</resources>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.4.2-SNAPSHOT</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<createDependencyReducedPom>false</createDependencyReducedPom>
+							<relocations>
+								<relocation>
+									<pattern>me.monst.pluginutil</pattern>
+									<shadedPattern>me.monst.qwicktree.dependencies.pluginutil</shadedPattern>
+								</relocation>
+							</relocations>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.coderplus.maven.plugins</groupId>
+				<artifactId>copy-rename-maven-plugin</artifactId>
+				<version>1.0</version>
+				<executions>
+					<execution>
+						<id>copy-file</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<sourceFile>target/SurvivalHavenPlugin.jar</sourceFile>
+							<destinationFile>C:\Users\Michael\Desktop\BuildTools\plugins\update\SurvivalHavenPlugin.jar</destinationFile>
+							<overWrite>true</overWrite>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 	</build>
 </project>

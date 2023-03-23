@@ -2,6 +2,7 @@ package me.monst.qwicktree;
 
 import java.util.HashMap;
 
+import me.monst.qwicktree.config.Configuration;
 import me.monst.qwicktree.tree.Tree;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -17,6 +18,8 @@ public class QwickTree extends JavaPlugin {
 		return instance;
 	}
 	
+	private final Configuration config = new Configuration(this);
+	
 	private final HashMap<Tree.Type, Integer> chopCount;
 	
 	public QwickTree() {
@@ -30,7 +33,7 @@ public class QwickTree extends JavaPlugin {
 		Config.get().update();
 		Config.get().load();
 		
-		getServer().getPluginManager().registerEvents(new QTListener(), this);
+		getServer().getPluginManager().registerEvents(new QTListener(config), this);
 		getCommand("qt").setExecutor(new QTCommand());
 		
 		//Load data
@@ -48,6 +51,10 @@ public class QwickTree extends JavaPlugin {
 		DisabledList.get().save();
 		
 		getServer().getScheduler().cancelTasks(this);
+	}
+	
+	public Configuration config() {
+		return config;
 	}
 	
 	public void addTreeChop(Tree.Type type) {

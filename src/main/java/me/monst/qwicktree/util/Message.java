@@ -59,15 +59,15 @@ public enum Message {
 	
 	CUSTOM("{0}");
 	
-	private static Logger log = QwickTree.get().getLogger();
+	private static final Logger log = QwickTree.get().getLogger();
 	
-	private String message;
+	private final String message;
 	
-	private Message(String message) {
+	Message(String message) {
 		this.message = message;
 	}
 	
-	private String prepare(String... replace) {
+	public String prepare(String... replace) {
 		String send = ChatColor.translateAlternateColorCodes('&', message);
 		
 		for (int index = 0; index < replace.length; index++)

@@ -18,9 +18,9 @@ public enum Permission {
 	
 	;
 	
-	private String name;
+	private final String name;
 	
-	private Permission(String name) {
+	Permission(String name) {
 		this.name = name;
 	}
 	

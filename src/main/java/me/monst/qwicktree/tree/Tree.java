@@ -17,6 +17,7 @@ import static org.bukkit.Material.ACACIA_SAPLING;
 
 public class Tree {
 	
+	private TreeType newType;
 	private final Type treeType;			//Used for internal purposes.
 	
 	private final boolean 				enabled,			// Whether this tree is enabled.

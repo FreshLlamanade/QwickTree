@@ -8,10 +8,7 @@ public enum DamageType {
 	;
 	
 	public static DamageType getFromName(String name) {
-		for (DamageType type: values())
-			if (type.name().equalsIgnoreCase(name))
-				return type;
-		
-		return null;
+		return valueOf(name.toUpperCase());
 	}
+	
 }
